@@ -10,6 +10,7 @@
 [bulid OAuth]https://developer.github.com/apps/building-oauth-apps/
 
 [okhttp官网]https://square.github.io/okhttp/
+[Flyway使用方法]https://flywaydb.org/getstarted/firststeps/maven
 
 ##脚本
 ```sql
