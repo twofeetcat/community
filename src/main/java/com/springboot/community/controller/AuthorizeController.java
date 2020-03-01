@@ -45,14 +45,15 @@ public class AuthorizeController {
         accessTokenDto.setState(state);
         String accessToken = githubProvider.getAccessToken(accessTokenDto);
         GithubUser githubUser = githubProvider.getUser(accessToken);
-        if (githubUser != null){
+        if (githubUser != null && githubUser.getId() != null){
             User user = new User(); //获取用户信息
             String token = UUID.randomUUID().toString();  //想让token代替曾经的session
             user.setToken(token); //生成一个token，并将token放进user对象中，存入数据库
             user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setGmtCreat(System.currentTimeMillis());
+            user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             user.setName(githubUser.getName());
+            user.setAvatarUrl(githubUser.getAvatar_url());
             userMapper.insert(user); //存入数据库
             response.addCookie(new Cookie("token", token));
             //不加前缀的话，只会把页面渲染到index，但是用户信息会出现在地址上，加上后，相当于重定向到index页面，地址也会转回index

@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/community.css">
     <script src="js/bootstrap.min.js" type="application/javascript"></script>
 </head>
 <body>
@@ -46,22 +47,36 @@
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-            <h2><span class="glyphicon glyphicon-list" aria-hidden="true"></span>发现</h2>
+            <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>发起</h2>
             <hr/>
-            <div class="media">
-                <div class="media-left">
-                    <a href="#">
-                        <img class="media-object img-rounded" src="https://avatars1.githubusercontent.com/u/57258165?v=4">
-                    </a>
+            <!-- action会自动找到名称为publish的post提，也就是publishController中的postmapper，把属性交给他-->
+            <form action="/publish" method="post">
+                <div class="form-group">
+                    <label for="title">问题标题（简单扼要）：</label>
+                    <input type="text" class="form-control" th:value="${title}" id="title" name="title" placeholder="问题标题...">
                 </div>
-                <div class="media-body">
-                    <h4 class="media-heading">苹果好吃么</h4>
-                    苹果到底好不好吃，想尝试一下
+                <div class="form-group">
+                    <label for="description">问题补充 (必填，请参照右方提示):</label>
+                    <textarea name="description" th:value="${description}" id="description" class="form-control" cols="30" rows="10"></textarea>
                 </div>
-            </div>
+                <div class="form-group">
+                    <label for="tag">添加标签：</label>
+                    <input type="text" class="form-control" th:value="${tag}" id="tag" name="tag" placeholder="请输入标签，以，号隔开">
+                </div>
+                <div class="container-fluid main">
+                    <div class="row">
+                        <!-- 希望这个警告栏是最大尺度地填满需要的地方-->
+                        <div class="alert alert-danger col-lg-9 col-md-12 col-sm-12 col-xs-12" th:if="${error} != null" th:text="${error}" ></div>
+                        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12"><button type="submit" class="btn btn-success btn-publish">发布</button></div>
+                    </div></div>
+
+            </form>
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <h3>热门话题</h3>
+            <h3>问题发起指南</h3>
+            ·假装此处有描述<br>
+            ·假装此处有描述<br>
+            ·假装此处有描述<br>
         </div>
     </div>
 </div>
