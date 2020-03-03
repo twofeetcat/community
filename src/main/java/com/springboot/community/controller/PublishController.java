@@ -38,6 +38,10 @@ public class PublishController {
             HttpServletRequest request,
             Model model
     ){
+        //model能在页面上直接获取到,用于回显
+        model.addAttribute("title", title);
+        model.addAttribute("description", description);
+        model.addAttribute("tag", tag);
         if(title == null || title == ""){
             model.addAttribute("error","标题不能为空");
             return "publish";
@@ -48,10 +52,6 @@ public class PublishController {
             model.addAttribute("error","标签不能为空");
             return "publish";
         }
-        //model能在页面上直接获取到
-        model.addAttribute("title", title);
-        model.addAttribute("description", description);
-        model.addAttribute("tag", tag);
         //拿到user对象，验证是否登录
         User user = null;
         Cookie[] cookies = request.getCookies();//从服务器拿到我们传过去的cookies

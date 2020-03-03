@@ -13,4 +13,7 @@ public interface UserMapper {
 
     @Select("select * from user where token = #{token}") //#{}表示在mybatis编译时，会把形参里的值放入大括号中进行判断
     User findUserByToken(@Param("token") String token);
+
+    @Select("select * from user where id = #{id}")
+    User findById(@Param("id") Integer id);
 }

@@ -53,7 +53,7 @@ public class AuthorizeController {
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             user.setName(githubUser.getName());
-            user.setAvatarUrl(githubUser.getAvatar_url());
+            user.setAvatarUrl(githubUser.getAvatarUrl());
             userMapper.insert(user); //存入数据库
             response.addCookie(new Cookie("token", token));
             //不加前缀的话，只会把页面渲染到index，但是用户信息会出现在地址上，加上后，相当于重定向到index页面，地址也会转回index

@@ -12,6 +12,7 @@
 [okhttp官网]https://square.github.io/okhttp/
 [Flyway使用方法]https://flywaydb.org/getstarted/firststeps/maven
 [Lombok]https://projectlombok.org/
+[thymeleaf]https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html
 ##脚本
 ```sql
 create table USER
