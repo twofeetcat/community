@@ -21,4 +21,10 @@ public interface QuestionMapper {
     //拿到最后一个问题的count
     @Select("select count(1) from question;")
     Integer count();
+
+    @Select("select * from question where creator = #{userId} limit #{offset}, #{size}")
+    List<Question> listByUserId(int userId, Integer offset, Integer size);
+
+    @Select("select count(1) from question where creator = #{userId}")
+    Integer countByUserId(int userId);
 }
