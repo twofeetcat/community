@@ -2,6 +2,9 @@ package com.springboot.community.service;
 
 import com.springboot.community.dto.PaginationDto;
 import com.springboot.community.dto.QuestionDto;
+import com.springboot.community.exception.CustomizeErrorCode;
+import com.springboot.community.exception.CustomizeException;
+import com.springboot.community.mapper.QuestionExtMapper;
 import com.springboot.community.mapper.QuestionMapper;
 import com.springboot.community.mapper.UserMapper;
 import com.springboot.community.model.Question;
@@ -22,6 +25,10 @@ public class QuestionService {
     private QuestionMapper questionMapper;
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
+
     public PaginationDto list(Integer page, Integer size) {
         PaginationDto paginationDto = new PaginationDto();
         Integer totalPage; //页面总数
@@ -55,7 +62,7 @@ public class QuestionService {
         return paginationDto;
     }
 
-    public PaginationDto listByUserId(int userId, Integer page, Integer size) {
+    public PaginationDto listByUserId(long userId, Integer page, Integer size) {
         PaginationDto paginationDto = new PaginationDto();
         Integer totalPage; //页面总数
         QuestionExample questionExample = new QuestionExample();
@@ -90,8 +97,11 @@ public class QuestionService {
         return paginationDto;
     }
 
-    public QuestionDto getQuestionDtoById(Integer id) {
+    public QuestionDto getQuestionDtoById(Long id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question == null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDto questionDto = new QuestionDto();
         BeanUtils.copyProperties(question, questionDto);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -104,6 +114,9 @@ public class QuestionService {
             //插入
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
+            question.setViewCount(0);
+            question.setLikeCount(0);
+            question.setCommentCount(0);
             questionMapper.insertSelective(question);
         }else {
             Question updateQuestion = new Question();
@@ -114,7 +127,18 @@ public class QuestionService {
             updateQuestion.setTitle(question.getTitle());
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria().andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(updateQuestion, questionExample);
+            int updated = questionMapper.updateByExampleSelective(updateQuestion, questionExample);
+            if (updated != 1){
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
+    }
+
+    //累加阅读数
+    public void incView(Long id) {
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtMapper.incView(question);
     }
 }
